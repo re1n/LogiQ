@@ -3,7 +3,7 @@ import random
 def shapes(canvas):
 	# Assume canvas is 800x400
 	shapes = ["triangle", "square", "circle"]
-	colours = ["red", "green", "blue", "purple", "orange", "yellow", "pink"]
+	colours = ["red", "green", "blue", "purple", "orange", "yellow", "pink", "cyan"]
 	# Draw a blue triangle in the first quadrant
 	canvas.create_polygon(100, 100, 200, 100, 150, 200, fill="blue", outline="")
 	for i in range(1,4):
