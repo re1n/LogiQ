@@ -1,6 +1,19 @@
-from tkinter import Tk, Canvas, Button
+from tkinter import Tk, Canvas, Checkbutton, Button, IntVar
 from draw import shapes
+from logic import generateSentence
 import random
+from time import sleep
+
+def check(vars, sentences, main_sentence, canvas):
+	correct = True
+	for i in range(0, 4):
+		if vars[i].get() == 1:
+			if sentences[i] != main_sentence:
+				correct = False
+	test = canvas.create_text(400, 200, text="Correct!" if correct else "Incorrect!", font=("Arial", 30))
+	canvas.update()
+	sleep(3)
+	canvas.delete(test)
 
 def setup():
 	base = Tk()
@@ -11,16 +24,26 @@ def setup():
 	canvas.config(width=800, height=400, bg="white")
 	canvas.pack()
 
-	op1 = Button(base, text="∀x(Triangle(x)⇒Blue(x))")
-	op1.place(x=10, y=410, width=380, height=100)
-	op2 = Button(base, text="∀x(Blue(x)⇒Triangle(x))")
-	op2.place(x=410, y=410, width=380, height=100)
-	op3 = Button(base, text="∀x(Square(x)⇒Red(x))")
-	op3.place(x=10, y=530, width=380, height=100)
-	op4 = Button(base, text="∀x(Square(x)⇒Green(x))")
-	op4.place(x=410, y=530, width=380, height=100)
+	main_sentence = generateSentence(True)
+	main_sentence_text = main_sentence[0]
+	sentences = [main_sentence_text]
+	for i in range(0, 3):
+		sentences.append(generateSentence(False))
+	random.shuffle(sentences)
 
-	shapes(canvas)
+	var1, var2, var3, var4 = IntVar(), IntVar(), IntVar(), IntVar()
+	op1 = Checkbutton(base, text=sentences[0], variable=var1)
+	op1.place(x=10, y=410, width=380, height=100)
+	op2 = Checkbutton(base, text=sentences[1], variable=var2)
+	op2.place(x=410, y=410, width=380, height=100)
+	op3 = Checkbutton(base, text=sentences[2], variable=var3)
+	op3.place(x=10, y=530, width=380, height=100)
+	op4 = Checkbutton(base, text=sentences[3], variable=var4)
+	op4.place(x=410, y=530, width=380, height=100)
+	op5 = Button(base, text="Submit", command=lambda : check([var1, var2, var3, var4], sentences, main_sentence_text, canvas))
+	op5.place(x=360, y=480, width=100, height=60)
+
+	shapes(canvas, main_sentence)
 
 	base.mainloop()
 
