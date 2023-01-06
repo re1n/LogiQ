@@ -1,5 +1,5 @@
 from tkinter import Tk, Canvas, Checkbutton, Button, IntVar
-from draw import shapes
+from draw import draw_shapes
 from logic import generateSentence
 import random
 from time import sleep
@@ -12,7 +12,7 @@ def check(vars, sentences, main_sentence, canvas):
 				correct = False
 	test = canvas.create_text(400, 200, text="Correct!" if correct else "Incorrect!", font=("Arial", 30))
 	canvas.update()
-	sleep(3)
+	sleep(2)
 	canvas.delete(test)
 
 def setup():
@@ -43,7 +43,8 @@ def setup():
 	op5 = Button(base, text="Submit", command=lambda : check([var1, var2, var3, var4], sentences, main_sentence_text, canvas))
 	op5.place(x=360, y=480, width=100, height=60)
 
-	shapes(canvas, main_sentence)
+	base.update()
+	draw_shapes(canvas)
 
 	base.mainloop()
 

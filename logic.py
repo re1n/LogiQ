@@ -38,5 +38,14 @@ def generateShapes(shape, colour, operator, quantifier):
 				if picked_shapes_and_colours[i][1] == colour:
 					picked_shapes_and_colours[i][0] = shape
 	random.shuffle(picked_shapes_and_colours)
-	return picked_shapes_and_colours	
-		
+	return picked_shapes_and_colours
+
+def generateNumShapes(num):
+	shapes = ["triangle", "square"]# "circle", "diamond", "hexagon"]
+	colours = ["red", "green", "blue", "purple", "orange", "yellow", "pink", "cyan"]
+	picked_shapes_and_colours = []
+	for i in range(0, num):
+		chosen_shape = random.choice(shapes)
+		chosen_colour = random.choice(colours)
+		picked_shapes_and_colours.append([chosen_shape, chosen_colour])
+	return picked_shapes_and_colours
