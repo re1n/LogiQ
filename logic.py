@@ -41,7 +41,7 @@ def generateShapes(shape, colour, operator, quantifier):
 	return picked_shapes_and_colours
 
 def generateNumShapes(num):
-	shapes = ["triangle", "square"]# "circle", "diamond", "hexagon"]
+	shapes = ["triangle", "square", "circle"]# "diamond", "hexagon"]
 	colours = ["red", "green", "blue", "purple", "orange", "yellow", "pink", "cyan"]
 	picked_shapes_and_colours = []
 	for i in range(0, num):

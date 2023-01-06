@@ -57,14 +57,25 @@ def draw_shapes(canvas):
 		colour = pair[1]
 		box = random.choice(boxes)
 		boxes.remove(box)
+		scale_factor = random.randint(0, 40)
+		box[0] += scale_factor
+		box[1] += scale_factor
+		box[2] -= scale_factor
+		box[3] -= scale_factor
 		if shape == "triangle":
 			height = box[3] - box[1]
 			length = box[2] - box[0]
 			diff = (length-height)/2
 			midpoint = (box[0] + box[2]) / 2
-			canvas.create_polygon(box[2]-diff-height, box[3], midpoint, box[1], box[2]-diff, box[3], fill=colour, outline="black")
+			x1, y1, x2, y2, x3, y3 = box[2]-diff-height, box[3], midpoint, box[1], box[2]-diff, box[3]
+			canvas.create_polygon(x1, y1, x2, y2, x3, y3, fill=colour, outline="black")
 		elif shape == "square":
 			height = box[3] - box[1]
 			length = box[2] - box[0]
 			diff = (length-height)/2
 			canvas.create_rectangle(box[0] + diff, box[1], box[2] - diff, box[3], fill=colour)
+		elif shape == "circle":
+			height = box[3] - box[1]
+			length = box[2] - box[0]
+			diff = (length-height)/2
+			canvas.create_oval(box[0] + diff, box[1], box[2] - diff, box[3], fill=colour)
