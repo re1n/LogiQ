@@ -272,8 +272,7 @@ def sentencesPets(picked_pets_and_people, pets, people, colours):
 			return (sentence, True)
 		
 	def onlyOne(invert = False):
-		with_pets = picked_pets_and_people
-		without_pets = picked_pets_and_people
+		with_pets = without_pets = picked_pets_and_people.copy()
 		for pair in with_pets:
 			if pair[1] == "NULL":
 				with_pets.remove(pair)
