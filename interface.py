@@ -18,7 +18,7 @@ def check(vars, sentencePairs, canvas, base, ops):
 
 def render(base, canvas, vars, ops):
 	pets = generatePets(5)
-	sentencePairs = sentencesPets(pets, ["Dog", "Cat"], ["Man", "Woman"])
+	sentencePairs = sentencesPets(pets, ["Dog", "Cat"], ["Man", "Woman"], ["Red", "Blue", "Green", "NULL"])
 	for i in range(0, 4):
 		ops[i].config(text=sentencePairs[i][0])
 		vars[i].set(0)
