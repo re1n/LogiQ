@@ -1,5 +1,3 @@
-import random
-from logic import generatePets
 from PIL import Image, ImageTk
 
 def draw_pets(canvas, sprites):
