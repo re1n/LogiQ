@@ -310,6 +310,11 @@ def sentencesPets(picked_pets_and_people, pets, people, colours):
 	print(picked_pets_and_people)
 	return sentences
 
+class Proposition:
+	def __init__(self, char, truth_value):
+		self.char = char
+		self.truth_values = truth_value
+
 # Students in a class scenario
 def generate_classroom():
 	def check_predicate(predicate, quantifier, students):
@@ -324,17 +329,16 @@ def generate_classroom():
 					return True
 			return False
 	
-	def create_abstract_sentence(sentence_arr, students):
-		truth_values = []
+	def create_propositional_sentence(sentence_arr, students):
 		quantifier = sentence_arr[0]
-		abstract_sentence = []
+		propositional_sentence = []
 		char = "P"
 		for i in range(1, len(sentence_arr)):
 			if len(sentence_arr[i]) == 1:
-				abstract_sentence.append(sentence_arr[i])
+				propositional_sentence.append(sentence_arr[i])
 			else:
-				abstract_sentence.append(char)
-				truth_values.append({char : check_predicate(sentence_arr[i], quantifier, students)})
+				prop = Proposition(char, check_predicate(sentence_arr[i], quantifier, students))
+				propositional_sentence.append(prop)
 				char = chr(ord(char) + 1)
 	
 	num_students = random.randint(4, 7)
@@ -376,11 +380,49 @@ def generate_classroom():
 		sentence = f"{quantifier}x {predicate}"
 		if sentence not in sentences:
 			sentences.append(sentence)
-			create_abstract_sentence(sentence_arr)
+			create_propositional_sentence(sentence_arr)
 	return students, sentences
 		
 
-# General function to check if a sentence is true or false
-def check_sentence(sentence, truth_values):
-	pass 
-	
+def check_general(P, truth_values):
+	def check_bracket_level(P, i):
+		if P[i] == "(":
+			return 1
+		if P[i] == ")":
+			return -1
+		return 0
+	if len(P) == 1:
+		return truth_values[P]
+	bracket_level = 0
+	for i in reversed(range(len(P))):
+		bracket_level += check_bracket_level(P, i)
+		if P[i] == "→" and bracket_level == 0:
+			return check_imp(P[:i], P[i+1:], truth_values)
+	bracket_level = 0
+	for i in reversed(range(len(P))):
+		bracket_level += check_bracket_level(P, i)
+		if P[i] == "∨" and bracket_level == 0:
+			return check_disj(P[:i], P[i+1:], truth_values)
+	bracket_level = 0
+	for i in reversed(range(len(P))):
+		bracket_level += check_bracket_level(P, i)
+		if P[i] == "∧" and bracket_level == 0:
+			return check_conj(P[:i], P[i+1:], truth_values)
+	bracket_level = 0
+	for i in reversed(range(len(P))):
+		bracket_level += check_bracket_level(P, i)
+		if P[i] == "¬" and bracket_level == 0:
+			return check_neg(P[i+1:], truth_values)
+
+
+def check_conj(P, Q, truth_values):
+	return check_general(P, truth_values) and check_general(Q, truth_values)
+
+def check_disj(P, Q, truth_values):
+	return check_general(P, truth_values) or check_general(Q, truth_values)
+
+def check_imp(P, Q, truth_values):
+	return (not check_general(P, truth_values)) or check_general(Q, truth_values)
+
+def check_neg(P, truth_values):
+	return not check_general(P, truth_values)
