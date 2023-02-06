@@ -309,3 +309,78 @@ def sentencesPets(picked_pets_and_people, pets, people, colours):
 	print(sentences)
 	print(picked_pets_and_people)
 	return sentences
+
+# Students in a class scenario
+def generate_classroom():
+	def check_predicate(predicate, quantifier, students):
+		if quantifier == "∀":
+			for student in students:
+				if not student[predicate]:
+					return False
+			return True
+		elif quantifier == "∃":
+			for student in students:
+				if student[predicate]:
+					return True
+			return False
+	
+	def create_abstract_sentence(sentence_arr, students):
+		truth_values = []
+		quantifier = sentence_arr[0]
+		abstract_sentence = []
+		char = "P"
+		for i in range(1, len(sentence_arr)):
+			if len(sentence_arr[i]) == 1:
+				abstract_sentence.append(sentence_arr[i])
+			else:
+				abstract_sentence.append(char)
+				truth_values.append({char : check_predicate(sentence_arr[i], quantifier, students)})
+				char = chr(ord(char) + 1)
+	
+	num_students = random.randint(4, 7)
+	students = []
+	for i in range(num_students):
+		has_laptop = False
+		has_calculator = False
+		has_pencil = False
+		if random.randint(0, 1) == 0:
+			has_laptop = True
+		if random.randint(0, 1) == 0:
+			has_calculator = True
+		if random.randint(0, 1) == 0:
+			has_pencil = True
+		students.append({"name": f"Student{i+1}", "hasLaptop": has_laptop, "hasCalculator": has_calculator, "hasPencil": has_pencil})
+	predicates = ["hasLaptop", "hasCalculator", "hasPencil"]
+	connectives = ["∧", "∨"]
+	quantifiers = ["∃", "∀"]
+	sentences = []
+	while len(sentences) < 4:
+		sentence_arr = []
+		quantifier = random.choice(quantifiers)
+		sentence_arr.append(quantifier)
+		if random.randint(0, 1) == 0:
+			predicate1 = random.choice(predicates)
+			sentence_arr.append(predicate1)
+			predicate = f"{predicate1}(x)"
+			
+		else:
+			predicate1 = random.choice(predicates)
+			predicate2 = random.choice(predicates)
+			while predicate1 == predicate2:
+				predicate2 = random.choice(predicates)
+			connective = random.choice(connectives)
+			predicate = f"{predicate1}(x) {connective} {predicate2}(x)"
+			sentence_arr.append(predicate1)
+			sentence_arr.append(connective)
+			sentence_arr.append(predicate2)
+		sentence = f"{quantifier}x {predicate}"
+		if sentence not in sentences:
+			sentences.append(sentence)
+			create_abstract_sentence(sentence_arr)
+	return students, sentences
+		
+
+# General function to check if a sentence is true or false
+def check_sentence(sentence, truth_values):
+	pass 
+	
