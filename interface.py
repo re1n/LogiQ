@@ -1,9 +1,13 @@
 import tkinter as tk
-from draw import draw_pets
-from logic import sentencesPets, generatePets
+from draw import draw_classroom
+from logic import generate_classroom
 from time import sleep
 
+score = 0
+q_count = 0
 def check(vars, sentencePairs, canvas, base, ops):
+	global score, q_count
+	q_count += 1
 	correct = True
 	for i in range(0, 4):
 		if (vars[i].get() == 1) and (sentencePairs[i][1] == False):
@@ -11,20 +15,26 @@ def check(vars, sentencePairs, canvas, base, ops):
 		if (vars[i].get() == 0) and (sentencePairs[i][1] == True):
 			correct = False
 	canvas.create_text(400, 350, text="Correct!" if correct else "Incorrect!", font=("Arial", 30), fill="green" if correct else "red")
+	score += 1 if correct else 0
 	canvas.update()
 	sleep(1)
 	canvas.delete("all")
+	if q_count == 5:
+		canvas.create_text(400, 350, text="You got " + str(score) + " out of 5 correct!", font=("Arial", 30), fill="green")
+		canvas.update()
+		sleep(3)
+		base.destroy()
+		return
 	render(base, canvas, vars, ops)
 
 def render(base, canvas, vars, ops):
-	pets = generatePets(5)
-	sentencePairs = sentencesPets(pets, ["Dog", "Cat"], ["Man", "Woman"], ["Red", "Blue", "Green", "NULL"])
+	classroomPairs, students = generate_classroom()
 	for i in range(0, 4):
-		ops[i].config(text=sentencePairs[i][0])
+		ops[i].config(text=classroomPairs[i][0], font=("Arial", 12))
 		vars[i].set(0)
-	ops[4].config(command=lambda : check(vars, sentencePairs, canvas, base, ops))
+	ops[4].config(command=lambda : check(vars, classroomPairs, canvas, base, ops))
 	base.update()
-	draw_pets(canvas, pets)
+	draw_classroom(canvas, students)
 
 def setup():
 	base = tk.Tk()

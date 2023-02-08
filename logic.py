@@ -1,424 +1,175 @@
 import random
 
-def generatePets(num):
-	pets = ["NULL", "Dog", "Cat"]
-	people = ["Man", "Woman"]
-	colours = ["NULL", "Red", "Blue", "Green"]
-	picked_pets_and_people = []
-	for i in range(0, num):
-		chosen_pet = random.choice(pets)
-		chosen_person = random.choice(people)
-		chosen_colour = random.choice(colours)
-		picked_pets_and_people.append((chosen_person, chosen_pet, chosen_colour))
-	return picked_pets_and_people
-
-def sentencesPets(picked_pets_and_people, pets, people, colours):
-	def everyone(invert = False):
-		for pair in picked_pets_and_people:
-			if pair[1] == "NULL":
-				if not invert:
-					sentence = f"∀x∃y HasPet(x, y)"
-					return (sentence, False)
-				else:
-					sentence = f"¬∀x∃y HasPet(x, y)"
-					return (sentence, True)
-		if not invert:
-			sentence = f"∀x∃y HasPet(x, y)"
-			return (sentence, True)
-		else:
-			sentence = f"¬∀x∃y HasPet(x, y)"
-			return (sentence, False)
-
-	def everyonePet(invert = False):
-		pet = random.choice(pets)
-		for pair in picked_pets_and_people:
-				if pair[1] != pet:
-					if not invert:
-						sentence = f"∀x∃y HasPet(x, y) ∧ {pet}(y)"
-						return (sentence, False)
-					else:
-						sentence = f"¬∀x∃y HasPet(x, y) ∧ {pet}(y)"
-						return (sentence, True)
-		if not invert:
-			sentence = f"∀x∃y HasPet(x, y) ∧ {pet}(y)"
-			return (sentence, True)
-		else:
-			sentence = f"∀x∃y HasPet(x, y) ∧ {pet}(y)"
-			return (sentence, False)
-
-	def everyoneColour(invert = False):
-		colour = random.choice(colours)
-		while colour == "NULL":
-			colour = random.choice(colours)
-		for pair in picked_pets_and_people:
-				if pair[2] != colour:
-					if not invert:
-						sentence = f"∀x∃y HasPet(x, y) ∧ {colour}(y)"
-						return (sentence, False)
-					else:
-						sentence = f"¬∀x∃y HasPet(x, y) ∧ {colour}(y)"
-						return (sentence, True)
-		if not invert:
-			sentence = f"∀x∃y HasPet(x, y) ∧ {colour}(y)"
-			return (sentence, True)
-		else:
-			sentence = f"¬∀x∃y HasPet(x, y) ∧ {colour}(y)"
-			return (sentence, False)
-
-	def everyPersonPet(invert = False):
-		person = random.choice(people)
-		pet = random.choice(pets)
-		for pair in picked_pets_and_people:
-				if pair[0] == person and pair[1] != pet:
-					if not invert:
-						sentence = f"∀x∃y {person}(x) → HasPet(x, y) ∧ {pet}(y)"
-						return (sentence, False)
-					else:
-						sentence = f"¬∀x∃y {person}(x) → HasPet(x, y) ∧ {pet}(y)"
-						return (sentence, True)
-		if not invert:
-			sentence = f"∀x∃y {person}(x) → HasPet(x, y) ∧ {pet}(y)"
-			return (sentence, True)
-		else:
-			sentence = f"¬∀x∃y {person}(x) → HasPet(x, y) ∧ {pet}(y)"
-			return (sentence, False)
-		
-	def everyPetPerson(invert = False):
-		person = random.choice(people)
-		pet = random.choice(pets)
-		for pair in picked_pets_and_people:
-				if pair[0] != person and pair[1] == pet:
-					if not invert:
-						sentence = f"∀x∃y {pet}(x) → HasOwner(x, y) ∧ {person}(y)"
-						return (sentence, False)
-					else:
-						sentence = f"¬∀x∃y {pet}(x) → HasOwner(x, y) ∧ {person}(y)"
-						return (sentence, True)
-		if not invert:
-			sentence = f"∀x∃y {pet}(x) → HasOwner(x, y) ∧ {person}(y)"
-			return (sentence, True)
-		else:
-			sentence = f"¬∀x∃y {pet}(x) → HasOwner(x, y) ∧ {person}(y)"
-			return (sentence, False)
-	
-	def everyPersonColour(invert = False):
-		person = random.choice(people)
-		colour = random.choice(colours)
-		while colour == "NULL":
-			colour = random.choice(colours)
-		for pair in picked_pets_and_people:
-				if pair[0] == person and pair[2] != colour:
-					if not invert:
-						sentence = f"∀x∃y {person}(x) → HasPet(x, y) ∧ {colour}(y)"
-						return (sentence, False)
-					else:
-						sentence = f"¬∀x∃y {person}(x) → HasPet(x, y) ∧ {colour}(y)"
-						return (sentence, True)
-		if not invert:
-			sentence = f"∀x∃y {person}(x) → HasPet(x, y) ∧ {colour}(y)"
-			return (sentence, True)
-		else:
-			sentence = f"¬∀x∃y {person}(x) → HasPet(x, y) ∧ {colour}(y)"
-			return (sentence, False)
-	
-	def everyPersonPetColour(invert = False):
-		person = random.choice(people)
-		pet = random.choice(pets)
-		colour = random.choice(colours)
-		while colour == "NULL":
-			colour = random.choice(colours)
-		for pair in picked_pets_and_people:
-				if pair[0] == person and (pair[1] != pet or pair[2] != colour):
-					if not invert:
-						sentence = f"∀x∃y {person}(x) → HasPet(x, y) ∧ {colour}(y) ∧ {pet}(y)"
-						return (sentence, False)
-					else:
-						sentence = f"¬∀x∃y {person}(x) → HasPet(x, y) ∧ {colour}(y) ∧ {pet}(y)"
-						return (sentence, True)
-		if not invert:
-			sentence = f"∀x∃y {person}(x) → HasPet(x, y) ∧ {colour}(y) ∧ {pet}(y)"
-			return (sentence, True)
-		else:
-			sentence = f"¬∀x∃y {person}(x) → HasPet(x, y) ∧ {colour}(y) ∧ {pet}(y)"
-			return (sentence, False)
-		
-	def someone(invert = False):
-		for pair in picked_pets_and_people:
-			if pair[1] != "NULL":
-				if not invert:
-					sentence = f"∃x∃y HasPet(x, y)"
-					return (sentence, True)
-				else:
-					sentence = f"¬∃x∃y HasPet(x, y)"
-					return (sentence, False)
-		if not invert:
-			sentence = f"∃x∃y HasPet(x, y)"
-			return (sentence, False)
-		else:
-			sentence = f"¬∃x∃y HasPet(x, y)"
-			return (sentence, True)
-	
-	def someonePet(invert = False):
-		pet = random.choice(pets)
-		for pair in picked_pets_and_people:
-				if pair[1] == pet:
-					if not invert:
-						sentence = f"∃x∃y {pet}(y) ∧ HasPet(x, y)"
-						return (sentence, True)
-					else:
-						sentence = f"¬∃x∃y {pet}(y) ∧ HasPet(x, y)"
-						return (sentence, False)
-		if not invert:
-			sentence = f"∃x∃y {pet}(y) ∧ HasPet(x, y)"
-			return (sentence, False)
-		else:
-			sentence = f"¬∃x∃y {pet}(y) ∧ HasPet(x, y)"
-			return (sentence, True)
-
-	def someoneColour(invert = False):
-		colour = random.choice(colours)
-		while colour == "NULL":
-			colour = random.choice(colours)
-		for pair in picked_pets_and_people:
-				if pair[2] == colour:
-					if not invert:
-						sentence = f"∃x∃y {colour}(y) ∧ HasPet(x, y)"
-						return (sentence, True)
-					else:
-						sentence = f"¬∃x∃y {colour}(y) ∧ HasPet(x, y)"
-						return (sentence, False)
-		if not invert:
-			sentence = f"∃x∃y {colour}(y) ∧ HasPet(x, y)"
-			return (sentence, False)
-		else:
-			sentence = f"¬∃x∃y {colour}(y) ∧ HasPet(x, y)"
-			return (sentence, True)
-		
-	def somePersonPetColour(invert = False):
-		person = random.choice(people)
-		pet = random.choice(pets)
-		colour = random.choice(colours)
-		while colour == "NULL":
-			colour = random.choice(colours)
-		for pair in picked_pets_and_people:
-				if pair[0] == person and pair[1] == pet and pair[2] == colour:
-					if not invert:
-						sentence = f"∃x∃y {person}(x) → HasPet(x, y) ∧ {colour}(y) ∧ {pet}(y)"
-						return (sentence, True)
-					else:
-						sentence = f"¬∃x∃y {person}(x) → HasPet(x, y) ∧ {colour}(y) ∧ {pet}(y)"
-						return (sentence, False)
-		if not invert:
-			sentence = f"∃x∃y {person}(x) → HasPet(x, y) ∧ {colour}(y) ∧ {pet}(y)"
-			return (sentence, False)
-		else:
-			sentence = f"¬∃x∃y {person}(x) → HasPet(x, y) ∧ {colour}(y) ∧ {pet}(y)"
-			return (sentence, True)
-	
-	def somePersonPet(invert = False):
-		person = random.choice(people)
-		pet = random.choice(pets)
-		for pair in picked_pets_and_people:
-				if pair[0] == person and pair[1] == pet:
-					if not invert:
-						sentence = f"∃x∃y {person}(x) → HasPet(x, y) ∧ {pet}(y)"
-						return (sentence, True)
-					else:
-						sentence = f"¬∃x∃y {person}(x) → HasPet(x, y) ∧ {pet}(y)"
-						return (sentence, False)
-		if not invert:
-			sentence = f"∃x∃y {person}(x) → HasPet(x, y) ∧ {pet}(y)"
-			return (sentence, False)
-		else:
-			sentence = f"¬∃x∃y {person}(x) → HasPet(x, y) ∧ {pet}(y)"
-			return (sentence, True)
-		
-	def somePersonColour(invert = False):
-		person = random.choice(people)
-		colour = random.choice(colours)
-		while colour == "NULL":
-			colour = random.choice(colours)
-		for pair in picked_pets_and_people:
-				if pair[0] == person and pair[2] == colour:
-					if not invert:
-						sentence = f"∃x∃y {person}(x) → HasPet(x, y) ∧ {colour}(y)"
-						return (sentence, True)
-					else:
-						sentence = f"¬∃x∃y {person}(x) → HasPet(x, y) ∧ {colour}(y)"
-						return (sentence, False)
-		if not invert:
-			sentence = f"∃x∃y {person}(x) → HasPet(x, y) ∧ {colour}(y)"
-			return (sentence, False)
-		else:
-			sentence = f"¬∃x∃y {person}(x) → HasPet(x, y) ∧ {colour}(y)"
-			return (sentence, True)
-	
-	def somePetPerson(invert = False):
-		person = random.choice(people)
-		pet = random.choice(pets)
-		for pair in picked_pets_and_people:
-				if pair[0] == person and pair[1] == pet:
-					if not invert:
-						sentence = f"∃x∃y {pet}(x) → HasOwner(x, y) ∧ {person}(y)"
-						return (sentence, True)
-					else:
-						sentence = f"¬∃x∃y {pet}(x) → HasOwner(x, y) ∧ {person}(y)"
-						return (sentence, False)
-		if not invert:
-			sentence = f"∃x∃y {pet}(x) → HasOwner(x, y) ∧ {person}(y)"
-			return (sentence, False)
-		else:
-			sentence = f"¬∃x∃y {pet}(x) → HasOwner(x, y) ∧ {person}(y)"
-			return (sentence, True)
-		
-	def onlyOne(invert = False):
-		with_pets = without_pets = picked_pets_and_people.copy()
-		for pair in with_pets:
-			if pair[1] == "NULL":
-				with_pets.remove(pair)
-		for pair in without_pets:
-			if pair[1] != "NULL":
-				without_pets.remove(pair)
-		if len(with_pets) == 1:
-			# Exactly one person has a pet
-			if not invert:
-				sentence = f"∃x∃y HasPet(x, y) ∧ ∀w∃z HasPet(w, z) → x==w"
-				return (sentence, True)
-		else:
-			if not invert:
-				sentence = f"∃x∃y HasPet(x, y) ∧ ∀w∃z HasPet(w, z) → x==w"
-				return (sentence, False)
-		if len(without_pets) == 1:
-			# Exactly one person does not have a pet
-			if invert:
-				sentence = f"∃x∃y ¬HasPet(x, y) ∧ ∀w∃z (¬x==w) → HasPet(w, z)"
-				return (sentence, True)
-		else:
-			if invert:
-				sentence = f"∃x∃y ¬HasPet(x, y) ∧ ∀w∃z (¬x==w) → HasPet(w, z)"
-				return (sentence, False)
-
-	func_list = [everyone, everyoneColour, everyonePet, everyPersonColour, everyPersonPet,
-	    everyPetPerson, everyPersonPetColour, someone, someoneColour, someonePet, somePersonPet,
-		somePersonColour, somePetPerson, somePersonPetColour, onlyOne]
-	sentences = []
-	while len(sentences) < 4:
-		sentence = random.choice(func_list)(invert = random.choice([True, False]))
-		if sentence not in sentences:
-			sentences.append(sentence)
-	print(sentences)
-	print(picked_pets_and_people)
-	return sentences
-
 # Students in a class scenario
 def generate_classroom():
-	def check_predicate(predicate, quantifier, students):
-		if quantifier == "∀":
-			for student in students:
-				if not student[predicate]:
-					return False
-			return True
-		elif quantifier == "∃":
-			for student in students:
-				if student[predicate]:
-					return True
-			return False
-	
-	def create_propositional_sentence(sentence_arr, students):
-		quantifier = sentence_arr[0]
-		propositional_sentence = ""
-		truth_values = {}
-		char = "P"
-		for i in range(1, len(sentence_arr)):
-			if len(sentence_arr[i]) == 1:
-				propositional_sentence += sentence_arr[i]
-			else:
-				truth_values[char] = check_predicate(sentence_arr[i], quantifier, students)
-				propositional_sentence += char
-				char = chr(ord(char) + 1)
-	
-	num_students = random.randint(4, 7)
-	students = []
-	for i in range(num_students):
-		has_laptop = False
-		has_calculator = False
-		has_pencil = False
-		if random.randint(0, 1) == 0:
-			has_laptop = True
-		if random.randint(0, 1) == 0:
-			has_calculator = True
-		if random.randint(0, 1) == 0:
-			has_pencil = True
-		students.append({"name": f"Student{i+1}", "hasLaptop": has_laptop, "hasCalculator": has_calculator, "hasPencil": has_pencil})
-	predicates = ["hasLaptop", "hasCalculator", "hasPencil"]
-	connectives = ["∧", "∨"]
-	quantifiers = ["∃", "∀"]
-	sentences = []
-	while len(sentences) < 4:
-		sentence_arr = []
-		quantifier = random.choice(quantifiers)
-		sentence_arr.append(quantifier)
-		if random.randint(0, 1) == 0:
-			predicate1 = random.choice(predicates)
-			sentence_arr.append(predicate1)
-			predicate = f"{predicate1}(x)"
-			
-		else:
-			predicate1 = random.choice(predicates)
-			predicate2 = random.choice(predicates)
-			while predicate1 == predicate2:
-				predicate2 = random.choice(predicates)
-			connective = random.choice(connectives)
-			predicate = f"{predicate1}(x) {connective} {predicate2}(x)"
-			sentence_arr.append(predicate1)
-			sentence_arr.append(connective)
-			sentence_arr.append(predicate2)
-		sentence = f"{quantifier}x {predicate}"
-		if sentence not in sentences:
-			sentences.append(sentence)
-			create_propositional_sentence(sentence_arr)
-	return students, sentences
-		
-def check_br_level(sentence, i):
-	if sentence[i] == "(":
-		return 1
-	elif sentence[i] == ")":
-		return -1
-	return 0
+    num_students = random.randint(4, 7)
+    students = []
+    for i in range(num_students):
+        has_laptop = False
+        has_calculator = False
+        has_pencil = False
+        if random.randint(0, 1) == 0:
+            has_laptop = True
+        if random.randint(0, 1) == 0:
+            has_calculator = True
+        if random.randint(0, 1) == 0:
+            has_pencil = True
+        students.append({"name": f"Student{i+1}", "hasLaptop": has_laptop, "hasCalculator": has_calculator, "hasPencil": has_pencil})
+    predicates = ["hasLaptop", "hasCalculator", "hasPencil"]
+    connectives = ["∧", "∨"]
+    quantifiers = ["∃", "∀"]
+    sentences = []
+    while len(sentences) < 4:
+        char = "P"
+        sentence_dict = {}
+        quantifier = random.choice(quantifiers)
+        sentence_dict["quantifiers"] = [quantifier, "x"]
+        if random.randint(0, 1) == 0:
+            predicate1 = random.choice(predicates)
+            sentence_dict["predicates"] = {char: [predicate1, "x"]}
+            predicate = f"{predicate1}(x)"
+            sentence_dict["form"] = char
+        else:
+            predicate1 = random.choice(predicates)
+            predicate2 = random.choice(predicates)
+            while predicate1 == predicate2:
+                predicate2 = random.choice(predicates)
+            connective = random.choice(connectives)
+            predicate = f"{predicate1}(x) {connective} {predicate2}(x)"
+            sentence_dict["predicates"] = {char: [predicate1, "x"], chr(ord(char)+1): [predicate2, "x"]}
+            sentence_dict["form"] = f"{char}{connective}{chr(ord(char)+1)}"
+        sentence = f"{quantifier}x {predicate}"
+        if sentence not in [x[0] for x in sentences]:
+            sentence_true = evaluate_sentence(sentence_dict, students)
+            sentences.append((sentence, sentence_true))
+    for pair in sentences:
+        print(f"{pair[0]} is {pair[1]}")
+    return sentences, students
 
-def eval_sentence(sentence, truth_values):
-	if len(sentence) == 1:
-		return truth_values[sentence]
-	
-	br_level = 0
-	for i in reversed(range(len(sentence))):
-		br_level += check_br_level(sentence, i)
-		if sentence[i] == "→" and br_level == 0:
-			return eval_implies(sentence[:i], sentence[i+1:], truth_values)
-	br_level = 0
-	for i in reversed(range(len(sentence))):
-		br_level += check_br_level(sentence, i)
-		if sentence[i] == "∨" and br_level == 0:
-			return eval_or(sentence[:i], sentence[i+1:], truth_values)
-	br_level = 0
-	for i in reversed(range(len(sentence))):
-		br_level += check_br_level(sentence, i)
-		if sentence[i] == "∧" and br_level == 0:
-			return eval_and(sentence[:i], sentence[i+1:], truth_values)
-	br_level = 0
-	for i in reversed(range(len(sentence))):
-		br_level += check_br_level(sentence, i)
-		if sentence[i] == "¬" and br_level == 0:
-			return eval_not(sentence[i+1:], truth_values)
+def deepest_bracket_level(string):
+    stack = []
+    max_depth = 0
+    depth = 0
+    num_occurrences = 0
+    for char in string:
+        if char == "(":
+            stack.append(char)
+            depth += 1
+            if depth > max_depth:
+                max_depth = depth
+                num_occurrences = 1
+            elif depth == max_depth:
+                num_occurrences += 1
+        elif char == ")":
+            stack.pop()
+            depth -= 1
+    return max_depth, num_occurrences
 
-def eval_or(left, right, truth_values):
-	return eval_sentence(left, truth_values) or eval_sentence(right, truth_values)
+def evaluate_predicates(p1, p2, conn, item={}):
+    print(f"p1: {p1}, p2: {p2}, conn: {conn}, item: {item}")
+    if p1 not in ["0", "1"] and p2 not in ["0", "1"]:
+        if conn == "∧":
+            return item[p1] and item[p2]
+        elif conn == "∨":
+            return item[p1] or item[p2]
+        elif conn == "→":
+            return not item[p1] or item[p2]
+        elif conn == "↔":
+            return item[p1] == item[p2]
+    elif p1 not in ["0", "1"] and p2 in ["0", "1"]:
+        p2 = False if p2 == "0" else True
+        if conn == "∧":
+            return item[p1] and p2
+        elif conn == "∨":
+            return item[p1] or p2
+        elif conn == "→":
+            return not item[p1] or p2
+        elif conn == "↔":
+            return item[p1] == p2
+    elif p1 in ["0", "1"] and p2 not in ["0", "1"]:
+        p1 = False if p1 == "0" else True
+        if conn == "∧":
+            return p1 and item[p2]
+        elif conn == "∨":
+            return p1 or item[p2]
+        elif conn == "→":
+            return not p1 or item[p2]
+        elif conn == "↔":
+            return p1 == item[p2]
+    elif p1 in ["0", "1"] and p2 in ["0", "1"]:
+        p1 = False if p1 == "0" else True
+        p2 = False if p2 == "0" else True
+        if conn == "∧":
+            return p1 and p2
+        elif conn == "∨":
+            return p1 or p2
+        elif conn == "→":
+            return not p1 or p2
+        elif conn == "↔":
+            return p1 == p2
 
-def eval_and(left, right, truth_values):
-	return eval_sentence(left, truth_values) and eval_sentence(right, truth_values)
-
-def eval_implies(left, right, truth_values):
-	return not eval_sentence(left, truth_values) or eval_sentence(right, truth_values)
-
-def eval_not(statement, truth_values):
-	return not eval_sentence(statement, truth_values)
+def evaluate_sentence(sentence, scenario):
+    if len(sentence["quantifiers"]) == 2:
+        quantifier = sentence["quantifiers"][0]
+        truth_values = []
+        for item in scenario:
+            formula = sentence["form"]
+            max_depth, num_occurrences = deepest_bracket_level(sentence["form"])
+            while max_depth > 0:
+                depth = 0
+                j = 0
+                for i in range(num_occurrences):
+                    while j+3 < len(formula):
+                        if formula[j] == "(":
+                            depth += 1
+                        if depth == max_depth:
+                            p1 = formula[j+1]
+                            if p1 != "1" and p1 != "0":
+                                predicate1 = sentence["predicates"][p1][0]
+                            else:
+                                predicate1 = p1
+                            p2 = formula[j+3]
+                            if p2 != "1" and p2 != "0":
+                                predicate2 = sentence["predicates"][p2][0]
+                            else:
+                                predicate2 = p2
+                            conn = formula[j+2]
+                            if evaluate_predicates(predicate1, predicate2, conn, item):
+                                formula = formula.replace(formula[j:j+5], "1")
+                            else:
+                                formula = formula.replace(formula[j:j+5], "0")
+                            depth -= 1
+                        j += 1
+                max_depth -= 1
+            if len(formula) == 1:
+                if item[sentence["predicates"][formula][0]]:
+                    formula = "1"
+                else:
+                    formula = "0"
+            else:
+                while len(formula) > 1:
+                    c1 = formula[0]
+                    conn = formula[1]
+                    c2 = formula[2]
+                    if c1 in ["0", "1"] and c2 in ["0", "1"]:
+                        if evaluate_predicates(c1, c2, conn, item):
+                            formula = formula.replace(formula[0:3], "1")
+                        else:
+                            formula = formula.replace(formula[0:3], "0")
+                    else:
+                        if c1 not in ["0", "1"]:
+                            c1 = sentence["predicates"][c1][0]
+                        if c2 not in ["0", "1"]:
+                            c2 = sentence["predicates"][c2][0]
+                        if evaluate_predicates(c1, c2, conn, item):
+                            formula = formula.replace(formula[0:3], "1")
+                        else:
+                            formula = formula.replace(formula[0:3], "0")
+            if formula == "1":
+                truth_values.append(True)
+            else:
+                truth_values.append(False)
+    if quantifier == "∀":
+        return False if False in truth_values else True
+    elif quantifier == "∃":
+        return True if True in truth_values else False
