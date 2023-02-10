@@ -8,11 +8,11 @@ def generate_classroom():
         has_laptop = False
         has_calculator = False
         has_pencil = False
-        if random.randint(0, 1) == 0:
+        if random.randint(0, 10) > 3:
             has_laptop = True
-        if random.randint(0, 1) == 0:
+        if random.randint(0, 10) > 3:
             has_calculator = True
-        if random.randint(0, 1) == 0:
+        if random.randint(0, 10) > 3:
             has_pencil = True
         students.append({"name": f"Student{i+1}", "hasLaptop": has_laptop, "hasCalculator": has_calculator, "hasPencil": has_pencil})
     predicates = ["hasLaptop", "hasCalculator", "hasPencil"]
