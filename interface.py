@@ -23,8 +23,9 @@ def check(vars, sentencePairs, canvas, base, ops):
 		canvas.create_text(400, 350, text="You got " + str(score) + " out of 5 correct!", font=("Arial", 30), fill="green")
 		canvas.update()
 		sleep(3)
-		base.destroy()
-		return
+		score = 0
+		q_count = 0
+		menu(base)
 	render(base, canvas, vars, ops)
 
 def render(base, canvas, vars, ops):
@@ -36,10 +37,9 @@ def render(base, canvas, vars, ops):
 	base.update()
 	draw_classroom(canvas, students)
 
-def setup():
-	base = tk.Tk()
-	base.title("LogiQ")
-	base.geometry("800x640")
+def setup_quiz(base):
+	for w in base.winfo_children():
+		w.destroy()
 
 	canvas = tk.Canvas(base)
 	canvas.config(width=800, height=400, bg="white")
@@ -60,6 +60,24 @@ def setup():
 	ops = [op1, op2, op3, op4, op5]
 
 	render(base, canvas, vars, ops)
+
+def menu(base):
+	for w in base.winfo_children():
+		w.destroy()
+
+	title = tk.Label(base, text="LogiQ", font=("Arial", 30))
+	title.place(x=0, y=0, width=800, height=100)
+
+	start = tk.Button(base, text="Start", command=lambda : setup_quiz(base))
+	start.place(x=360, y=480, width=100, height=60)
+
+
+def setup():
+	base = tk.Tk()
+	base.title("LogiQ")
+	base.geometry("800x640")
+
+	menu(base)
 
 	base.mainloop()
 
