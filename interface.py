@@ -1,6 +1,6 @@
 import tkinter as tk
 from draw import draw_classroom, draw_sports
-from logic import generate_classroom, generate_favourite_sports
+from generate import generate_classroom, generate_favourite_sports
 from time import sleep
 
 score = 0
@@ -13,15 +13,15 @@ def check(vars, sentencePairs, canvas, base, ops):
 	q_count += 1
 	correct = True
 	for i in range(0, 4):
+		# Marked as true but is false
 		if (vars[i].get() == 1) and (sentencePairs[i][1] == False):
 			correct = False
+		# Marked as false but is true
 		if (vars[i].get() == 0) and (sentencePairs[i][1] == True):
 			correct = False
-	#canvas.create_text(WIDTH/2, HEIGHT*0.3, text="Correct!" if correct else "Incorrect!", font=("Arial", 40), fill="green" if correct else "red")
-	# display correct in a green box with white text, incorrect in a red box with white text
+	# Display correct/incorrect message
 	canvas.create_rectangle(WIDTH/2-200, HEIGHT/3-100, WIDTH/2+200, HEIGHT/3+100, fill="green" if correct else "red")
 	canvas.create_text(WIDTH/2, HEIGHT/3, text="Correct!" if correct else "Incorrect!", font=("Arial", 40), fill="white")
-
 	score += 1 if correct else 0
 	canvas.update()
 	sleep(1)
@@ -33,7 +33,8 @@ def check(vars, sentencePairs, canvas, base, ops):
 		score = 0
 		q_count = 0
 		menu(base)
-	render(base, canvas, vars, ops)
+	else:
+		render(base, canvas, vars, ops)
 
 def render(base, canvas, vars, ops):
 	classroomPairs, students = generate_favourite_sports()
