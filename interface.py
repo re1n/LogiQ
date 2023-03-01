@@ -1,6 +1,6 @@
 import tkinter as tk
-from draw import draw_classroom, draw_sports
-from generate import generate_classroom, generate_favourite_sports
+from draw import draw_classroom, draw_sports, draw_pets
+from generate import generate_classroom, generate_favourite_sports, generate_pets
 from time import sleep
 
 score = 0
@@ -37,13 +37,13 @@ def check(vars, sentencePairs, canvas, base, ops):
 		render(base, canvas, vars, ops)
 
 def render(base, canvas, vars, ops):
-	classroomPairs, students = generate_favourite_sports()
+	classroomPairs, students = generate_pets()
 	for i in range(0, 4):
 		ops[i].config(text=classroomPairs[i][0], font=("Arial", 12))
 		vars[i].set(0)
 	ops[4].config(command=lambda : check(vars, classroomPairs, canvas, base, ops))
 	base.update()
-	draw_sports(canvas, students)
+	draw_pets(canvas, students)
 
 def setup_quiz(base):
 	global WIDTH, HEIGHT, PADDING
@@ -64,7 +64,6 @@ def setup_quiz(base):
 	op4 = tk.Checkbutton(base, variable=var4)
 	op4.place(x=(WIDTH*0.5)+PADDING, y=(HEIGHT*0.8)+PADDING, width=(WIDTH*0.5)-2*PADDING, height=(HEIGHT*0.2)-2*PADDING)
 	op5 = tk.Button(base, text="Submit")
-	# place submit button directly in the center of the four options
 	op5.place(x=(WIDTH*0.5)-50, y=(HEIGHT*0.8)-30, width=100, height=60)
 	vars = [var1, var2, var3, var4]
 	ops = [op1, op2, op3, op4, op5]
@@ -72,10 +71,11 @@ def setup_quiz(base):
 	render(base, canvas, vars, ops)
 
 def menu(base):
+	# Clear screen
 	for w in base.winfo_children():
 		w.destroy()
 
-	title = tk.Label(base, text="LogiQ", font=("Arial", 30))
+	title = tk.Label(base, text="LogiQ", font=("Arial", 40, "bold"))
 	title.place(x=0, y=0, width=WIDTH, height=100)
 
 	start = tk.Button(base, text="Start", font=("Arial", 20), command=lambda : setup_quiz(base))

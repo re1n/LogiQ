@@ -62,3 +62,25 @@ def draw_sports(canvas, people):
 			canvas.create_text(x_pos + circle_size/2, y_pos, text=f"• {dislike.capitalize()}", font=("Arial", 15))
 			y_pos += 20
 		x_pos += circle_size + circle_spacing
+
+def draw_pets(canvas, people):
+	num_people = len(people)
+	circle_size = 70
+	circle_spacing = 75
+	x_pos = (1200 - circle_size * num_people - circle_spacing * (num_people-1)) / 2
+	for person in people:
+		y_pos = 100
+		# Draw the person's circle
+		canvas.create_oval(x_pos, y_pos, x_pos+circle_size, y_pos+circle_size, fill="white", outline="black", width=3)
+		y_pos += circle_size + 20
+		# Write "has" under the person's circle
+		canvas.create_text(x_pos + circle_size/2, y_pos, text="Has:", font=("Arial", 15))
+		y_pos += 20
+		if not person["pets"]:
+			canvas.create_text(x_pos + circle_size/2, y_pos, text="∅", font=("Arial", 25))
+			y_pos += 20
+		for pet in person["pets"]:
+			# Draw the person's pets
+			canvas.create_text(x_pos + circle_size/2, y_pos, text=f"• {pet['size'].capitalize()} {pet['type'].capitalize()}", font=("Arial", 15))
+			y_pos += 20
+		x_pos += circle_size + circle_spacing

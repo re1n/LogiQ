@@ -1,20 +1,20 @@
-import random
+from random import randint, choice
 
 from logic import evaluate_sentence
 
 # Easy
 def generate_classroom():
-    num_students = random.randint(4, 7)
+    num_students = randint(4, 7)
     students = []
     for i in range(num_students):
         has_laptop = False
         has_calculator = False
         has_pencil = False
-        if random.randint(0, 9) > 3:
+        if randint(0, 9) > 3:
             has_laptop = True
-        if random.randint(0, 9) > 3:
+        if randint(0, 9) > 3:
             has_calculator = True
-        if random.randint(0, 9) > 3:
+        if randint(0, 9) > 3:
             has_pencil = True
         students.append({"name": f"Student{i+1}", "hasLaptop": has_laptop, "hasCalculator": has_calculator, "hasPencil": has_pencil})
     predicates = ["hasLaptop", "hasCalculator", "hasPencil"]
@@ -24,54 +24,52 @@ def generate_classroom():
     while len(sentences) < 4:
         char = "P"
         sentence_dict = {}
-        quantifier = random.choice(quantifiers)
+        quantifier = choice(quantifiers)
         sentence_dict["quantifiers"] = [quantifier, "x"]
-        if random.randint(0, 1) == 0:
-            predicate1 = random.choice(predicates)
+        if randint(0, 1) == 0:
+            predicate1 = choice(predicates)
             sentence_dict["predicates"] = {char: [predicate1, "x"]}
             predicate = f"{predicate1}(x)"
             sentence_dict["form"] = char
         else:
-            predicate1 = random.choice(predicates)
-            predicate2 = random.choice(predicates)
+            predicate1 = choice(predicates)
+            predicate2 = choice(predicates)
             while predicate1 == predicate2:
-                predicate2 = random.choice(predicates)
-            connective = random.choice(connectives)
+                predicate2 = choice(predicates)
+            connective = choice(connectives)
             predicate = f"{predicate1}(x) {connective} {predicate2}(x)"
             sentence_dict["predicates"] = {char: [predicate1, "x"], chr(ord(char)+1): [predicate2, "x"]}
             sentence_dict["form"] = f"{char}{connective}{chr(ord(char)+1)}"
         sentence = f"{quantifier}x {predicate}"
         if sentence not in [x[0] for x in sentences]:
-            sentence_dict["variables"] = 1
+            sentence_dict["difficulty"] = 0
             sentence_true = evaluate_sentence(sentence_dict, students)
             sentences.append((sentence, sentence_true))
-    for pair in sentences:
-        print(f"{pair[0]} is {pair[1]}")
     return sentences, students
 
 # Medium
 def generate_favourite_sports():
-    num_people = random.randint(4, 7)
+    num_people = randint(3, 6)
     people = []
     sports = ["football", "basketball", "tennis", "rugby", "cricket", "golf", "hockey", "athletics"]
     for i in range(num_people):
         pick_sports = sports.copy()
-        if random.randint(0, 9) > 2:
-            num_likes = random.randint(1, 3)
+        if randint(0, 9) > 2:
+            num_likes = randint(1, 3)
         else:
             num_likes = 0
-        if random.randint(0, 9) > 2:
-            num_dislikes = random.randint(1, 3)
+        if randint(0, 9) > 2:
+            num_dislikes = randint(1, 3)
         else:
             num_dislikes = 0
         likes = []
         dislikes = []
         for j in range(num_likes):
-            sport = random.choice(pick_sports)
+            sport = choice(pick_sports)
             likes.append(sport)
             pick_sports.remove(sport)
         for j in range(num_dislikes):
-            sport = random.choice(pick_sports)
+            sport = choice(pick_sports)
             dislikes.append(sport)
             pick_sports.remove(sport)
         people.append({"name": f"Person{i+1}", "likes": likes, "dislikes": dislikes})
@@ -79,69 +77,138 @@ def generate_favourite_sports():
     connectives = ["∧", "∨", "→"]
     quantifiers = ["∃", "∀"]
     sentences = []
-    # generate 4 sentences of medium difficulty, each sentence should fall under one of the following 3 rules:
-    # 1. a sentence with 1 quantifier, 2 predicates, 1 connective and 1 implication
-    # 2. a sentence with 1 quantifier, 3 predicates, 2 connectives and 1 implication
-    # 3. a sentence with 2 quantifiers, 1 or 2 predicates, 0 or 1 connectives and no implication
+    # Generates 4 sentences of medium difficulty, each sentence should fall under one of the following 3 rules:
+    # 1. a sentence with 1 quantifier, 2 predicates, 1 connective and 1 implication (Rule 3 in Table 2.1)
+    # 2. a sentence with 1 quantifier, 3 predicates, 2 connectives and 0 or 1 implication (Rule 4 in Table 2.1)
+    # 3. a sentence with 2 quantifiers and 1 predicate (Rule 5 in Table 2.1)
     while len(sentences) < 4:
         pick_sports = sports.copy()
         char = "P"
         sentence_dict = {}
-        rule = random.randint(0, 2)
+        rule = randint(0, 2)
+        # Rule 3
         if rule == 0:
-            quantifier = random.choice(quantifiers)
+            quantifier = choice(quantifiers)
             sentence_dict["quantifiers"] = [quantifier, "x"]
-            predicate1 = random.choice(predicates)
-            sport1 = random.choice(pick_sports)
+            predicate1 = choice(predicates)
+            sport1 = choice(pick_sports)
             pick_sports.remove(sport1)
-            predicate2 = random.choice(predicates)
-            sport2 = random.choice(pick_sports)
+            predicate2 = choice(predicates)
+            sport2 = choice(pick_sports)
             pick_sports.remove(sport2)
-            connective = random.choice(connectives)
+            connective = "→"
             sentence_dict["predicates"] = {char: [predicate1, "x", sport1], chr(ord(char)+1): [predicate2, "x", sport2]}
             sentence_dict["form"] = f"{char}{connective}{chr(ord(char)+1)}"
             sentence = f"{quantifier}x {predicate1}(x, {sport1}) {connective} {predicate2}(x, {sport2})"
+        # Rule 4
         elif rule == 1:
-            quantifier = random.choice(quantifiers)
+            quantifier = choice(quantifiers)
             sentence_dict["quantifiers"] = [quantifier, "x"]
-            predicate1 = random.choice(predicates)
-            sport1 = random.choice(pick_sports)
+            predicate1 = choice(predicates)
+            sport1 = choice(pick_sports)
             pick_sports.remove(sport1)
-            predicate2 = random.choice(predicates)
-            sport2 = random.choice(pick_sports)
+            predicate2 = choice(predicates)
+            sport2 = choice(pick_sports)
             pick_sports.remove(sport2)
-            predicate3 = random.choice(predicates)
-            sport3 = random.choice(pick_sports)
+            predicate3 = choice(predicates)
+            sport3 = choice(pick_sports)
             pick_sports.remove(sport3)
-            connective1 = random.choice(connectives)
-            connective2 = random.choice(connectives)
+            connective1 = choice(connectives)
+            connective2 = choice(connectives)
+            # Ensure no more than one implication
             while connective1 == connective2 == "→":
-                connective2 = random.choice(connectives)
+                connective2 = choice(connectives)
             sentence_dict["predicates"] = {char: [predicate1, "x", sport1], chr(ord(char)+1): [predicate2, "x", sport2], chr(ord(char)+2): [predicate3, "x", sport3]}
+            # Randomly place parentheses either between first two predicates or last two predicates if the connectives are not the same
             if connective1 != connective2:
-                if random.randint(0, 1) == 0:
+                if randint(0, 1) == 0:
                     sentence_dict["form"] = f"({char}{connective1}{chr(ord(char)+1)}){connective2}{chr(ord(char)+2)}"
                     sentence = f"{quantifier}x ({predicate1}(x, {sport1}) {connective1} {predicate2}(x, {sport2})) {connective2} {predicate3}(x, {sport3})"
                 else:
                     sentence_dict["form"] = f"{char}{connective1}({chr(ord(char)+1)}{connective2}{chr(ord(char)+2)})"
                     sentence = f"{quantifier}x {predicate1}(x, {sport1}) {connective1} ({predicate2}(x, {sport2}) {connective2} {predicate3}(x, {sport3}))"
+            # If connectives are the same (i.e. two and or two or), no need for extra parentheses
             else:
                 sentence_dict["form"] = f"{char}{connective1}{chr(ord(char)+1)}{connective2}{chr(ord(char)+2)}"
                 sentence = f"{quantifier}x {predicate1}(x, {sport1}) {connective1} {predicate2}(x, {sport2}) {connective2} {predicate3}(x, {sport3})"
+        # Rule 5
         else:
             quantifier1 = "∀"
             quantifier2 = "∃"
             sentence_dict["quantifiers"] = [quantifier1, "x", quantifier2, "y"]
-            predicate1 = random.choice(predicates)
+            predicate1 = choice(predicates)
             sentence_dict["predicates"] = {char: [predicate1, "x", "y"]}
             sentence_dict["form"] = char
             sentence = f"{quantifier1}x {quantifier2}y {predicate1}(x, y)"
+        # Check sentence is not a duplicate
         if sentence not in [x[0] for x in sentences]:
-            sentence_dict["variables"] = 2
-            sentence_true = evaluate_sentence(sentence_dict, people)
-            sentences.append((sentence, sentence_true))
-    for pair in sentences:
-        print(f"{pair[0]} is {pair[1]}")
-    for person in people:
-        print(f"{person['name']} likes {person['likes']}, dislikes {person['dislikes']}")
+            sentence_dict["difficulty"] = 1
+            # Check if sentence is true or false in image
+            sentence_truth_value = evaluate_sentence(sentence_dict, people)
+            sentences.append((sentence, sentence_truth_value))
+    return sentences, people
+
+# Hard
+def generate_pets():
+    num_people = randint(3, 6)
+    people = []
+    pets_list = ["dog", "cat", "rabbit", "hamster", "goldfish", "bird", "snake", "turtle"]
+    sizes = ["small", "medium", "large"]
+    for i in range(num_people):
+        rand = randint(0, 9)
+        pets = []
+        if rand < 1:
+            num_pets = 0
+        elif rand < 8:
+            num_pets = 1
+        else:
+            num_pets = 2
+        for j in range(num_pets):
+            pet = {}
+            pet["type"] = choice(pets_list)
+            pet["size"] = choice(sizes)
+            pets.append(pet)
+        people.append({"name": f"Person{i+1}", "pets": pets})
+    predicates_x = ["owns"]
+    predicates_y = pets_list + sizes
+    connectives = ["∧", "∨"]
+    quantifiers = ["∃", "∀"]
+    sentences = []
+    # Generates 4 sentences of hard difficulty, each sentence should fall under one of the following 2 rules:
+    # 1. a sentence with 2 quantifiers, 2 predicates and one implication (Rule 5 in Table 2.1)
+    # 2. a sentence with 2 quantifiers, 3 predicates, two connectives and one implication (Rule 6 in Table 2.1)
+    while len(sentences) < 4:
+        char = "P"
+        sentence_dict = {}
+        rule = randint(0, 1)
+        # Rule 5
+        if rule == 0:
+            quantifier1 = choice(quantifiers)
+            quantifier2 = "∃"
+            sentence_dict["quantifiers"] = [quantifier1, "x", quantifier2, "y"]
+            predicate1 = choice(predicates_x)
+            connective = "∧"
+            predicate2 = choice(sizes)
+            sentence_dict["predicates"] = {char: [predicate1, "x", "y"], chr(ord(char)+1): [predicate2, "y"]}
+            sentence_dict["form"] = f"{char}{connective}{chr(ord(char)+1)}"
+            sentence = f"{quantifier1}x {quantifier2}y {predicate1}(x, y) {connective} {predicate2}(y)"
+        # Rule 6
+        elif rule == 1:
+            quantifier1 = choice(quantifiers)
+            quantifier2 = "∃"
+            sentence_dict["quantifiers"] = [quantifier1, "x", quantifier2, "y"]
+            predicate1 = choice(predicates_x)
+            connective1 = "→"
+            connective2 = choice(connectives)
+            predicate2 = choice(pets_list)
+            predicate3 = choice(sizes)
+            sentence_dict["predicates"] = {char: [predicate1, "x", "y"], chr(ord(char)+1): [predicate2, "y"], chr(ord(char)+2): [predicate3, "y"]}
+            sentence_dict["form"] = f"{char}{connective1}({chr(ord(char)+1)}{connective2}{chr(ord(char)+2)})"
+            sentence = f"{quantifier1}x {quantifier2}y {predicate1}(x, y) {connective1} ({predicate2}(y) {connective2} {predicate3}(y))"
+        # Check sentence is not a duplicate
+        if sentence not in [x[0] for x in sentences]:
+            sentence_dict["difficulty"] = 2
+            # Check if sentence is true or false in image
+            sentence_truth_value = evaluate_sentence(sentence_dict, people)
+            sentences.append((sentence, sentence_truth_value))
     return sentences, people
