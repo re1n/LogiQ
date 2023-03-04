@@ -4,7 +4,7 @@ from logic import evaluate_sentence
 
 # Easy
 def generate_classroom():
-    num_students = randint(4, 7)
+    num_students = randint(3, 7)
     students = []
     for i in range(num_students):
         has_laptop = False
@@ -54,11 +54,11 @@ def generate_favourite_sports():
     sports = ["football", "basketball", "tennis", "rugby", "cricket", "golf", "hockey", "athletics"]
     for i in range(num_people):
         pick_sports = sports.copy()
-        if randint(0, 9) > 2:
+        if randint(0, 9) > 0:
             num_likes = randint(1, 3)
         else:
             num_likes = 0
-        if randint(0, 9) > 2:
+        if randint(0, 9) > 0:
             num_dislikes = randint(1, 3)
         else:
             num_dislikes = 0
