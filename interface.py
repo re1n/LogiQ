@@ -8,7 +8,7 @@ q_count = 0
 WIDTH = 1200
 HEIGHT = 900
 PADDING = 10
-def check(vars, sentencePairs, canvas, base, ops):
+def check(vars, sentencePairs, canvas, base, ops, difficulty):
 	global score, q_count, WIDTH, HEIGHT
 	q_count += 1
 	correct = True
@@ -34,18 +34,25 @@ def check(vars, sentencePairs, canvas, base, ops):
 		q_count = 0
 		menu(base)
 	else:
-		render(base, canvas, vars, ops)
+		render(base, canvas, vars, ops, difficulty)
 
-def render(base, canvas, vars, ops):
-	classroomPairs, students = generate_pets()
+def render(base, canvas, vars, ops, difficulty):
+	if difficulty == 0:
+		sentences, objects = generate_classroom()
+		draw_classroom(canvas, objects)
+	elif difficulty == 1:
+		sentences, objects = generate_favourite_sports()
+		draw_sports(canvas, objects)
+	else:
+		sentences, objects = generate_pets()
+		draw_pets(canvas, objects)
 	for i in range(0, 4):
-		ops[i].config(text=classroomPairs[i][0], font=("Arial", 12))
+		ops[i].config(text=sentences[i][0], font=("Arial", 12))
 		vars[i].set(0)
-	ops[4].config(command=lambda : check(vars, classroomPairs, canvas, base, ops))
+	ops[4].config(command=lambda : check(vars, sentences, canvas, base, ops, difficulty))
 	base.update()
-	draw_pets(canvas, students)
 
-def setup_quiz(base):
+def setup_quiz(base, difficulty):
 	global WIDTH, HEIGHT, PADDING
 	for w in base.winfo_children():
 		w.destroy()
@@ -68,7 +75,16 @@ def setup_quiz(base):
 	vars = [var1, var2, var3, var4]
 	ops = [op1, op2, op3, op4, op5]
 
-	render(base, canvas, vars, ops)
+	render(base, canvas, vars, ops, difficulty)
+
+def display_difficulties(base, start):
+	start.destroy()
+	easy = tk.Button(base, text="Easy", font=("Arial", 20), command=lambda : setup_quiz(base, 0))
+	easy.place(x=(WIDTH*0.5)-150, y=(HEIGHT*0.5)-30, width=300, height=60)
+	medium = tk.Button(base, text="Medium", font=("Arial", 20), command=lambda : setup_quiz(base, 1))
+	medium.place(x=(WIDTH*0.5)-150, y=(HEIGHT*0.5)+60, width=300, height=60)
+	hard = tk.Button(base, text="Hard", font=("Arial", 20), command=lambda : setup_quiz(base, 2))
+	hard.place(x=(WIDTH*0.5)-150, y=(HEIGHT*0.5)+150, width=300, height=60)
 
 def menu(base):
 	# Clear screen
@@ -78,7 +94,7 @@ def menu(base):
 	title = tk.Label(base, text="LogiQ", font=("Arial", 40, "bold"))
 	title.place(x=0, y=0, width=WIDTH, height=100)
 
-	start = tk.Button(base, text="Start", font=("Arial", 20), command=lambda : setup_quiz(base))
+	start = tk.Button(base, text="Start", font=("Arial", 20), command=lambda : display_difficulties(base, start))
 	# place start button directly in the center of the screen
 	start.place(x=(WIDTH*0.5)-150, y=(HEIGHT*0.5)-30, width=300, height=60)
 
