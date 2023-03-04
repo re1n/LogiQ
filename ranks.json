@@ -1,0 +1,38 @@
+[
+	{
+		"num": 1,
+		"name": "Beginner"
+	},
+	{
+		"num": 2,
+		"name": "Novice"
+	},
+	{
+		"num": 3,
+		"name": "Student"
+	},
+	{
+		"num": 4,
+		"name": "Intermediate"
+	},
+	{
+		"num": 5,
+		"name": "Advanced"
+	},
+	{
+		"num": 6,
+		"name": "Expert"
+	},
+	{
+		"num": 7,
+		"name": "Master"
+	},
+	{
+		"num": 8,
+		"name": "Legend"
+	},
+	{
+		"num": 9,
+		"name": "Genius"
+	}
+]

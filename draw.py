@@ -8,7 +8,7 @@ def get_domain(scenario):
 def draw_classroom(canvas, students):
     num_students = len(students)
     circle_size = 70
-    circle_spacing = 85
+    circle_spacing = 95
     x_pos = (1200 - circle_size * num_students - circle_spacing * (num_students-1)) / 2
     for student in students:
         y_pos = 150
@@ -37,7 +37,7 @@ def draw_sports(canvas, people):
     # Evenly space the people with a 50px buffer
     num_people = len(people)
     circle_size = 70
-    circle_spacing = 85
+    circle_spacing = 95
     x_pos = (1200 - circle_size * num_people - circle_spacing * (num_people-1)) / 2
     for person in people:
         y_pos = 100
@@ -72,7 +72,7 @@ def draw_sports(canvas, people):
 def draw_pets(canvas, people):
     num_people = len(people)
     circle_size = 70
-    circle_spacing = 85
+    circle_spacing = 95
     x_pos = (1200 - circle_size * num_people - circle_spacing * (num_people-1)) / 2
     for person in people:
         y_pos = 100
@@ -80,7 +80,7 @@ def draw_pets(canvas, people):
         canvas.create_oval(x_pos, y_pos, x_pos+circle_size, y_pos+circle_size, fill="white", outline="black", width=3)
         y_pos += circle_size + 20
         # Write "has" under the person's circle
-        canvas.create_text(x_pos + circle_size/2, y_pos, text="Has:", font=("Arial", 15, "bold"))
+        canvas.create_text(x_pos + circle_size/2, y_pos, text="Owns:", font=("Arial", 15, "bold"))
         y_pos += 20
         if not person["pets"]:
             canvas.create_text(x_pos + circle_size/2, y_pos, text="∅", font=("Arial", 25))

@@ -170,13 +170,12 @@ def generate_pets():
             pets.append(pet)
         people.append({"name": f"Person{i+1}", "pets": pets})
     predicates_x = ["owns"]
-    predicates_y = pets_list + sizes
     connectives = ["∧", "∨"]
     quantifiers = ["∃", "∀"]
     sentences = []
     # Generates 4 sentences of hard difficulty, each sentence should fall under one of the following 2 rules:
-    # 1. a sentence with 2 quantifiers, 2 predicates and one implication (Rule 5 in Table 2.1)
-    # 2. a sentence with 2 quantifiers, 3 predicates, two connectives and one implication (Rule 6 in Table 2.1)
+    # 1. a sentence with 2 quantifiers, 2 predicates and one implication (Rule 6 in Table 2.1)
+    # 2. a sentence with 2 quantifiers, 3 predicates, two connectives and one implication (Rule 7 in Table 2.1)
     while len(sentences) < 4:
         char = "P"
         sentence_dict = {}
