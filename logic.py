@@ -189,9 +189,13 @@ def evaluate_sentence(sentence, scenario):
                         if c1 not in ["0", "1"]:
                             predicate1 = sentence["predicates"][c1][0]
                             variable1 = sentence["predicates"][c1][2]
+                        else:
+                            predicate1 = c1
                         if c2 not in ["0", "1"]:
                             predicate2 = sentence["predicates"][c2][0]
                             variable2 = sentence["predicates"][c2][2]
+                        else:
+                            predicate2 = c2
                         if evaluate_predicates(predicate1, predicate2, conn, item, [variable1, variable2]):
                             formula = formula.replace(formula[0:3], "1")
                         else:
