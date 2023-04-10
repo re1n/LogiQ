@@ -4,13 +4,11 @@
 
 # Check deepest bracket level of a sentence and how many times it occurs
 def deepest_bracket_level(string):
-    stack = []
     max_depth = 0
     depth = 0
     num_occurrences = 0
     for char in string:
         if char == "(":
-            stack.append(char)
             depth += 1
             if depth > max_depth:
                 max_depth = depth
@@ -18,9 +16,9 @@ def deepest_bracket_level(string):
             elif depth == max_depth:
                 num_occurrences += 1
         elif char == ")":
-            stack.pop()
             depth -= 1
     return max_depth, num_occurrences
+
 
 # Evaluate an expression in the form P conn Q
 # where P/Q are either True or False and conn is a connective
@@ -34,6 +32,11 @@ def evaluate_truth_values(v1, v2, conn):
     elif conn == "↔":
         return v1 == v2
 
+
+# Evaluate an expression in the form P conn Q
+# where P/Q are either predicates, 1 or 0 and conn is connective
+# item is the object to evaluate the expression for
+# variables holds any required variables for the expression
 def evaluate_predicates(p1, p2, conn, item={}, variables=[]):
     if not variables:
         if p1 not in ["0", "1"] and p2 not in ["0", "1"]:
@@ -67,14 +70,25 @@ def evaluate_predicates(p1, p2, conn, item={}, variables=[]):
         p2_truth = False if p2 == "0" else True
         return evaluate_truth_values(p1_truth, p2_truth, conn)
 
+
+# General sentence evaluator, takes a sentence and a scenario
+# represented in an image and returns whether the sentence is true
+# or false in the scenario
+# For every difficulty level, the evaluator breaks down the
+# sentence into expressions of the form P conn Q and replaces
+# these expressions with 1 or 0 if they are true or false respectively
+# Eventually, the sentence is reduced to a single 1 or 0 and
+# the evaluator returns the truth value of the sentence
 def evaluate_sentence(sentence, scenario):
     truth_values = []
-    # Classroom scenario
+    # Classroom scenario (easy)
     if sentence["difficulty"] == 0:
         quantifier1 = sentence["quantifiers"][0]
         for item in scenario:
             formula = sentence["form"]
-            max_depth, num_occurrences = deepest_bracket_level(sentence["form"])
+            max_depth, num_occurrences = deepest_bracket_level(
+                sentence["form"]
+            )
             while max_depth > 0:
                 depth = 0
                 for i in range(num_occurrences):
@@ -94,7 +108,9 @@ def evaluate_sentence(sentence, scenario):
                             else:
                                 predicate2 = p2
                             conn = formula[j+2]
-                            if evaluate_predicates(predicate1, predicate2, conn, item):
+                            if evaluate_predicates(
+                                predicate1, predicate2, conn, item
+                            ):
                                 formula = formula.replace(formula[j:j+5], "1")
                             else:
                                 formula = formula.replace(formula[j:j+5], "0")
@@ -131,13 +147,15 @@ def evaluate_sentence(sentence, scenario):
                 truth_values.append(True)
             else:
                 truth_values.append(False)
-    # Favourite sports scenario
+    # Favourite sports scenario (medium, 1 quantifier)
     elif len(sentence["quantifiers"]) == 2 and sentence["difficulty"] == 1:
         quantifier1 = sentence["quantifiers"][0]
         truth_values = []
         for item in scenario:
             formula = sentence["form"]
-            max_depth, num_occurrences = deepest_bracket_level(sentence["form"])
+            max_depth, num_occurrences = deepest_bracket_level(
+                sentence["form"]
+            )
             while max_depth > 0:
                 depth = 0
                 j = 0
@@ -159,7 +177,11 @@ def evaluate_sentence(sentence, scenario):
                             else:
                                 predicate2 = p2
                             conn = formula[j+2]
-                            if evaluate_predicates(predicate1, predicate2, conn, item, [variable1, variable2]):
+                            if evaluate_predicates(
+                                predicate1, predicate2, conn, item, [
+                                    variable1, variable2
+                                ]
+                            ):
                                 formula = formula.replace(formula[j:j+5], "1")
                             else:
                                 formula = formula.replace(formula[j:j+5], "0")
@@ -196,7 +218,11 @@ def evaluate_sentence(sentence, scenario):
                             variable2 = sentence["predicates"][c2][2]
                         else:
                             predicate2 = c2
-                        if evaluate_predicates(predicate1, predicate2, conn, item, [variable1, variable2]):
+                        if evaluate_predicates(
+                            predicate1, predicate2, conn, item, [
+                                variable1, variable2
+                            ]
+                        ):
                             formula = formula.replace(formula[0:3], "1")
                         else:
                             formula = formula.replace(formula[0:3], "0")
@@ -204,99 +230,103 @@ def evaluate_sentence(sentence, scenario):
                 truth_values.append(True)
             else:
                 truth_values.append(False)
-    
+
+    # Favourite sports scenario (medium, 2 quantifiers)
     elif len(sentence["quantifiers"]) == 4 and sentence["difficulty"] == 1:
         quantifier1 = sentence["quantifiers"][0]
         quantifier2 = sentence["quantifiers"][2]
-        # For all x there exists a y
-        if quantifier1 == "∀" and quantifier2 == "∃":
-            truth_values = []
-            formula = sentence["form"]
-            max_depth, num_occurrences = deepest_bracket_level(sentence["form"])
-            while max_depth > 0:
-                depth = 0
-                j = 0
-                for i in range(num_occurrences):
-                    while j+3 < len(formula):
-                        if formula[j] == "(":
-                            depth += 1
-                        if depth == max_depth:
-                            p1 = formula[j+1]
-                            if p1 != "1" and p1 != "0":
-                                predicate1 = sentence["predicates"][p1][0]
-                                for item in scenario:
-                                    if not item[predicate1]:
-                                        predicate1 = "0"
-                                        break
-                                if predicate1 != "0":
-                                    predicate1 = "1"
-                            else:
-                                predicate1 = p1
-                            p2 = formula[j+3]
-                            if p2 != "1" and p2 != "0":
-                                predicate2 = sentence["predicates"][p2][0]
-                                for item in scenario:
-                                    if not item[predicate2]:
-                                        predicate2 = "0"
-                                        break
-                                if predicate2 != "0":
-                                    predicate2 = "1"
-                            else:
-                                predicate2 = p2
-                            conn = formula[j+2]
-                            if evaluate_predicates(predicate1, predicate2, conn, item):
-                                formula = formula.replace(formula[j:j+5], "1")
-                            else:
-                                formula = formula.replace(formula[j:j+5], "0")
-                            depth -= 1
-                        j += 1
-                max_depth -= 1
-            if len(formula) == 1:
-                predicate = sentence["predicates"][formula][0]
-                for item in scenario:
-                    formula = "1"
-                    if not item[predicate]:
-                        formula = "0"
-                        break
-            else:
-                while len(formula) > 1:
-                    c1 = formula[0]
-                    conn = formula[1]
-                    c2 = formula[2]
-                    if c1 in ["0", "1"] and c2 in ["0", "1"]:
-                        c1_truth = False if c1 == "0" else True
-                        c2_truth = False if c2 == "0" else True
-                        if evaluate_truth_values(c1_truth, c2_truth, conn):
-                            formula = formula.replace(formula[0:3], "1")
-                        else:
-                            formula = formula.replace(formula[0:3], "0")
-                    else:
-                        if c1 not in ["0", "1"]:
-                            predicate1 = sentence["predicates"][c1][0]
-                            c1 = "1"
+        truth_values = []
+        formula = sentence["form"]
+        max_depth, num_occurrences = deepest_bracket_level(
+            sentence["form"])
+        while max_depth > 0:
+            depth = 0
+            j = 0
+            for i in range(num_occurrences):
+                while j+3 < len(formula):
+                    if formula[j] == "(":
+                        depth += 1
+                    if depth == max_depth:
+                        p1 = formula[j+1]
+                        if p1 != "1" and p1 != "0":
+                            predicate1 = sentence["predicates"][p1][0]
                             for item in scenario:
                                 if not item[predicate1]:
-                                    c1 = "0"
+                                    predicate1 = "0"
                                     break
-                        if c2 not in ["0", "1"]:
-                            predicate2 = sentence["predicates"][c2][0]
-                            c2 = "1"
+                            if predicate1 != "0":
+                                predicate1 = "1"
+                        else:
+                            predicate1 = p1
+                        p2 = formula[j+3]
+                        if p2 != "1" and p2 != "0":
+                            predicate2 = sentence["predicates"][p2][0]
                             for item in scenario:
                                 if not item[predicate2]:
-                                    c2 = "0"
+                                    predicate2 = "0"
                                     break
-                        if evaluate_predicates(predicate1, predicate2, conn, item):
-                            formula = formula.replace(formula[0:3], "1")
+                            if predicate2 != "0":
+                                predicate2 = "1"
                         else:
-                            formula = formula.replace(formula[0:3], "0")
-            if formula == "1":
-                return True
-            else:
-                return False
-    # Pets scenario
+                            predicate2 = p2
+                        conn = formula[j+2]
+                        if evaluate_predicates(
+                            predicate1, predicate2, conn, item
+                        ):
+                            formula = formula.replace(formula[j:j+5], "1")
+                        else:
+                            formula = formula.replace(formula[j:j+5], "0")
+                        depth -= 1
+                    j += 1
+            max_depth -= 1
+        if len(formula) == 1:
+            predicate = sentence["predicates"][formula][0]
+            for item in scenario:
+                formula = "1"
+                if not item[predicate]:
+                    formula = "0"
+                    break
+        else:
+            while len(formula) > 1:
+                c1 = formula[0]
+                conn = formula[1]
+                c2 = formula[2]
+                if c1 in ["0", "1"] and c2 in ["0", "1"]:
+                    c1_truth = False if c1 == "0" else True
+                    c2_truth = False if c2 == "0" else True
+                    if evaluate_truth_values(c1_truth, c2_truth, conn):
+                        formula = formula.replace(formula[0:3], "1")
+                    else:
+                        formula = formula.replace(formula[0:3], "0")
+                else:
+                    if c1 not in ["0", "1"]:
+                        predicate1 = sentence["predicates"][c1][0]
+                        c1 = "1"
+                        for item in scenario:
+                            if not item[predicate1]:
+                                c1 = "0"
+                                break
+                    if c2 not in ["0", "1"]:
+                        predicate2 = sentence["predicates"][c2][0]
+                        c2 = "1"
+                        for item in scenario:
+                            if not item[predicate2]:
+                                c2 = "0"
+                                break
+                    if evaluate_predicates(
+                        predicate1, predicate2, conn, item
+                    ):
+                        formula = formula.replace(formula[0:3], "1")
+                    else:
+                        formula = formula.replace(formula[0:3], "0")
+        if formula == "1":
+            return True
+        else:
+            return False
+
+    # Pets scenario (hard, 2 quantifiers)
     elif len(sentence["quantifiers"]) == 4 and sentence["difficulty"] == 2:
         quantifier1 = sentence["quantifiers"][0]
-        quantifier2 = sentence["quantifiers"][2]
         truth_values = []
         for item in scenario:
             formula = sentence["form"]
@@ -320,9 +350,12 @@ def evaluate_sentence(sentence, scenario):
                                     variable1 = sentence["predicates"][p1][0]
                                     predicate1 = "0"
                                     for pet in item["pets"]:
-                                        if variable1 == pet["type"] or variable1 == pet["size"]:
+                                        if (
+                                            variable1 == pet["type"] or
+                                            variable1 == pet["size"]
+                                        ):
                                             predicate1 = "1"
-                                            break              
+                                            break
                             else:
                                 predicate1 = p1
                             p2 = formula[j+3]
@@ -336,13 +369,18 @@ def evaluate_sentence(sentence, scenario):
                                     variable2 = sentence["predicates"][p2][0]
                                     predicate2 = "0"
                                     for pet in item["pets"]:
-                                        if variable2 == pet["type"] or variable2 == pet["size"]:
+                                        if (
+                                            variable2 == pet["type"] or
+                                            variable2 == pet["size"]
+                                        ):
                                             predicate2 = "1"
                                             break
                             else:
                                 predicate2 = p2
                             conn = formula[j+2]
-                            if evaluate_predicates(predicate1, predicate2, conn, item):
+                            if evaluate_predicates(
+                                predicate1, predicate2, conn, item
+                            ):
                                 formula = formula.replace(formula[j:j+5], "1")
                             else:
                                 formula = formula.replace(formula[j:j+5], "0")
@@ -376,7 +414,10 @@ def evaluate_sentence(sentence, scenario):
                                 variable1 = sentence["predicates"][c1][0]
                                 c1 = "0"
                                 for pet in item["pets"]:
-                                    if variable1 == pet["type"] or variable1 == pet["size"]:
+                                    if (
+                                        variable1 == pet["type"] or
+                                        variable1 == pet["size"]
+                                    ):
                                         c1 = "1"
                         if c2 not in ["0", "1"]:
                             if len(sentence["predicates"][c2]) == 3:
@@ -387,7 +428,10 @@ def evaluate_sentence(sentence, scenario):
                                 variable2 = sentence["predicates"][c2][0]
                                 c2 = "0"
                                 for pet in item["pets"]:
-                                    if variable2 == pet["type"] or variable2 == pet["size"]:
+                                    if (
+                                        variable2 == pet["type"] or
+                                        variable2 == pet["size"]
+                                    ):
                                         c2 = "1"
                         if evaluate_predicates(c1, c2, conn, item):
                             formula = formula.replace(formula[0:3], "1")
@@ -396,7 +440,7 @@ def evaluate_sentence(sentence, scenario):
                 if formula == "1":
                     truth_values.append(True)
                 else:
-                    truth_values.append(False)                       
+                    truth_values.append(False)
     if quantifier1 == "∀":
         return False if False in truth_values else True
     elif quantifier1 == "∃":

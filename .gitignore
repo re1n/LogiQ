@@ -130,3 +130,6 @@ dmypy.json
 
 # Playground
 playground.py
+
+# vscode
+.vscode/
