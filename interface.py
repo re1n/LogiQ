@@ -42,23 +42,27 @@ def check(vars, sentencePairs, canvas, base, ops, difficulty):
                        font=("Arial", 40), fill="white")
     score += 1 if correct else 0
     canvas.update()
-    sleep(1)
+    sleep(2)
     canvas.delete("all")
     if q_count == 5:
+        earned_points = 0
         f = open("usr.bin", "rb")
         user_list = list(f.read())
         points = user_list[7]
         # Adjust score & questions attempted/successful based on difficulty
         if difficulty == 0:
             points += score
+            earned_points = score
             user_list[0] += score
             user_list[1] += 5
         elif difficulty == 1:
             points += score*3
+            earned_points = score*3
             user_list[2] += score
             user_list[3] += 5
         elif difficulty == 2:
             points += score*5
+            earned_points = score*5
             user_list[4] += score
             user_list[5] += 5
         if points >= 25 and user_list[6] < 9:
@@ -72,8 +76,14 @@ def check(vars, sentencePairs, canvas, base, ops, difficulty):
         f.write(bytearray(user_list))
         f.close()
         canvas.create_text(WIDTH/2, HEIGHT*0.3,
-                           text="You got " + str(score) + " out of 5 correct!",
-                           font=("Arial", 40), fill="green")
+                           text=f"You got {str(score)} out of 5 correct!",
+                           font=("Arial", 40),
+                           fill="green" if score >= 1 else "red")
+        canvas.create_text(WIDTH/2, HEIGHT*0.4,
+                           text=f"You earned {str(earned_points)} points!"
+                           if score != 1 else "You earned 1 point!",
+                           font=("Arial", 40),
+                           fill="green" if score >= 1 else "red")
         canvas.update()
         sleep(3)
         score = 0
@@ -227,6 +237,7 @@ def setup():
     base = tk.Tk()
     base.title("LogiQ")
     base.geometry(f"{WIDTH}x{HEIGHT}")
+    base.resizable(False, False)
 
     menu(base)
 

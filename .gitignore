@@ -133,3 +133,6 @@ playground.py
 
 # vscode
 .vscode/
+
+# usr file
+usr.bin
