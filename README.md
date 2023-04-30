@@ -4,7 +4,7 @@
 
 ## Usage
 
-Provided the most recent version of [Python3](https://www.python.org/downloads/) is installed, launch the interface from the command line in the source directory with
+Provided the most recent version of [Python3](https://www.python.org/downloads/) and its interpreter are installed, launch the interface from the command line in the source directory with
 
 ```
 python3 interface.py
