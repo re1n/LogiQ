@@ -129,8 +129,8 @@ def draw_pets(canvas, people):
         for pet in person["pets"]:
             # Draw the person's pets
             canvas.create_text(x_pos + circle_size/2, y_pos,
-                               text=f"• {pet['size'].capitalize()} \
-                                {pet['type'].capitalize()}",
+                               text=f"• {pet['size'].capitalize()}" + \
+                                	f" {pet['type'].capitalize()}",
                                     font=("Arial", 15))
             y_pos += 20
         x_pos += circle_size + circle_spacing

@@ -126,8 +126,8 @@ def generate_favourite_sports():
                                                predicate2, "x", sport2
                                                ]}
             sentence_dict["form"] = f"{char}{connective}{chr(ord(char)+1)}"
-            sentence = f"{quantifier}x {predicate1}(x, {sport1}) \
-                {connective} {predicate2}(x, {sport2})"
+            sentence = f"{quantifier}x {predicate1}(x, {sport1}) " + \
+                f"{connective} {predicate2}(x, {sport2})"
         # Rule 4
         elif rule == 1:
             quantifier = choice(quantifiers)
@@ -157,25 +157,25 @@ def generate_favourite_sports():
             # or last two predicates if the connectives are not the same
             if connective1 != connective2:
                 if randint(0, 1) == 0:
-                    sentence_dict["form"] = f"({char}{connective1}\
-                        {chr(ord(char)+1)}){connective2}{chr(ord(char)+2)}"
-                    sentence = f"{quantifier}x ({predicate1}(x, {sport1})\
-                        {connective1} {predicate2}(x, {sport2})) {connective2}\
-                        {predicate3}(x, {sport3})"
+                    sentence_dict["form"] = f"({char}{connective1}" + \
+                        f"{chr(ord(char)+1)}){connective2}{chr(ord(char)+2)}"
+                    sentence = f"{quantifier}x ({predicate1}(x, {sport1}) " + \
+                        f"{connective1} {predicate2}(x, {sport2})) " + \
+                        f"{connective2} {predicate3}(x, {sport3})"
                 else:
-                    sentence_dict["form"] = f"{char}{connective1}\
-                        ({chr(ord(char)+1)}{connective2}{chr(ord(char)+2)})"
-                    sentence = f"{quantifier}x {predicate1}(x, {sport1}) \
-                        {connective1} ({predicate2}(x, {sport2}) \
-                        {connective2} {predicate3}(x, {sport3}))"
+                    sentence_dict["form"] = f"{char}{connective1}" + \
+                        f"({chr(ord(char)+1)}{connective2}{chr(ord(char)+2)})"
+                    sentence = f"{quantifier}x {predicate1}(x, {sport1}) " + \
+                        f"{connective1} ({predicate2}(x, {sport2}) " + \
+                        f"{connective2} {predicate3}(x, {sport3}))"
             # If connectives are the same (i.e. two and or two or),
             # no need for extra parentheses
             else:
-                sentence_dict["form"] = f"{char}{connective1}\
-                    {chr(ord(char)+1)}{connective2}{chr(ord(char)+2)}"
-                sentence = f"{quantifier}x {predicate1}(x, {sport1})\
-                    {connective1} {predicate2}(x, {sport2}) \
-                    {connective2} {predicate3}(x, {sport3})"
+                sentence_dict["form"] = f"{char}{connective1}" + \
+                    f"{chr(ord(char)+1)}{connective2}{chr(ord(char)+2)}"
+                sentence = f"{quantifier}x {predicate1}(x, {sport1}) " + \
+                    f"{connective1} {predicate2}(x, {sport2}) " + \
+                    f"{connective2} {predicate3}(x, {sport3})"
         # Rule 5
         else:
             quantifier1 = "∀"
@@ -242,8 +242,8 @@ def generate_pets():
             sentence_dict["predicates"] = {char: [predicate1, "x", "y"],
                                            chr(ord(char)+1): [predicate2, "y"]}
             sentence_dict["form"] = f"{char}{connective}{chr(ord(char)+1)}"
-            sentence = f"{quantifier1}x {quantifier2}y {predicate1}(x, y)\
-                {connective} {predicate2}(y)"
+            sentence = f"{quantifier1}x {quantifier2}y {predicate1}(x, y) " + \
+                f"{connective} {predicate2}(y)"
         # Rule 7
         elif rule == 1:
             quantifier1 = choice(quantifiers)
@@ -257,10 +257,10 @@ def generate_pets():
             sentence_dict["predicates"] = {char: [predicate1, "x", "y"],
                                            chr(ord(char)+1): [predicate2, "y"],
                                            chr(ord(char)+2): [predicate3, "y"]}
-            sentence_dict["form"] = f"{char}{connective1}({chr(ord(char)+1)}\
-                {connective2}{chr(ord(char)+2)})"
-            sentence = f"{quantifier1}x {quantifier2}y {predicate1}(x, y)\
-                {connective1} ({predicate2}(y) {connective2} {predicate3}(y))"
+            sentence_dict["form"] = f"{char}{connective1}({chr(ord(char)+1)}" + \
+                f"{connective2}{chr(ord(char)+2)})"
+            sentence = f"{quantifier1}x {quantifier2}y {predicate1}(x, y) " + \
+                f"{connective1} ({predicate2}(y) {connective2} {predicate3}(y))"
         # Check sentence is not a duplicate
         if sentence not in [x[0] for x in sentences]:
             sentence_dict["difficulty"] = 2
