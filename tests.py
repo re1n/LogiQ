@@ -2,6 +2,8 @@
 
 from logic import evaluate_sentence
 import unittest
+import random
+import time
 
 
 class TestEasy(unittest.TestCase):
@@ -254,5 +256,108 @@ class TestHard(unittest.TestCase):
         scenario2[1]["pets"][0]["type"] = "cat"
         self.assertEqual(evaluate_sentence(sentence2, scenario2), True)
 
+class TestPerformance(unittest.TestCase):
+    def test_performance(self):
+        start = time.time()
+        sentence1 = {
+            "quantifiers": ["∀", "x", "∃", "y"],
+            "predicates": {
+                "P": ["owns", "x", "y"],
+                "Q": ["large", "y"]
+            },
+            "form": "P∧Q",
+            "difficulty": 2
+        }
+        scenario1 = [
+            {
+                "pets": [
+                    {
+                        "type": "dog",
+                        "size": "large"
+                    },
+                    {
+                        "type": "cat",
+                        "size": "small"
+                    }
+                ]
+            },
+            {
+                "pets": [
+                    {
+                        "type": "goldfish",
+                        "size": "small"
+                    }
+                ]
+            },
+            {
+                "pets": [
+                    {
+                        "type": "hamster",
+                        "size": "large"
+                    }
+                ]
+            }
+        ]
+        sentence2 = {
+            "quantifiers": ["∀", "x", "∃", "y"],
+            "predicates": {
+                "P": ["owns", "x", "y"],
+                "Q": ["small", "y"],
+                "R": ["cat", "y"]
+            },
+            "form": "P→(Q∧R)",
+            "difficulty": 2
+        }
+        scenario2 = [
+            {
+                "pets": [
+                    {
+                        "type": "dog",
+                        "size": "large"
+                    },
+                    {
+                        "type": "cat",
+                        "size": "small"
+                    }
+                ]
+            },
+            {
+                "pets": [
+                    {
+                        "type": "goldfish",
+                        "size": "small"
+                    }
+                ]
+            },
+            {
+                "pets": [
+                    {
+                        "type": "bird",
+                        "size": "large"
+                    },
+                    {
+                        "type": "cat",
+                        "size": "small"
+                    }
+                ]
+            }
+        ]
+        for i in range(50000):
+            if random.randint(0, 1) == 0:
+                sen = sentence1.copy()
+                sce = scenario1.copy()
+            else:
+                sen = sentence2.copy()
+                sce = scenario2.copy()
+            if random.randint(0, 1) == 0:
+                sen["quantifiers"][0] = "∃"
+                self.assertEqual(evaluate_sentence(sen, sce), True)
+            else:
+                sen["quantifiers"][0] = "∀"
+                self.assertEqual(evaluate_sentence(sen, sce), False)
+        end = time.time()
+        self.assertEqual(end - start < 1, True)
+            
+        
 
 unittest.main()
