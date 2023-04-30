@@ -10,4 +10,4 @@ Provided the most recent version of [Python3](https://www.python.org/downloads/)
 python3 interface.py
 ```
 
-Note: the program is designed to run on a Windows machine, preferably running Windows 11. While it is likely to work on any operating system, the interface may appear different on environments such as Mac or Linux.
+Note: the program is designed to run on a Windows machine, preferably running Windows 11. It has not been tested on other environments and may be unstable on Mac or Linux.
